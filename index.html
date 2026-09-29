@@ -34,6 +34,8 @@
   <meta itemprop="image" content="https://www.stouras.com/ucd-hackathon/share-square.jpg">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#002548">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -57,7 +59,7 @@
       <span class="brand-text"><span class="top">UCD</span><span class="bottom">AI HACKATHON</span></span>
     </a>
     <button class="nav-toggle" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <nav class="nav" id="nav" aria-label="Sections">
       <a href="#about">About</a>
@@ -86,7 +88,7 @@
         <a class="btn btn-primary" data-register href="#register">Register now</a>
         <a class="btn btn-ghost" href="#program">See the programme</a>
       </div>
-      <div class="countdown" id="countdown" hidden aria-live="polite" aria-label="Time until the hackathon starts">
+      <div class="countdown" id="countdown" hidden role="timer" aria-label="Time until the hackathon starts">
         <div class="cell"><div class="num" data-cd="days">0</div><div class="lab">days</div></div>
         <div class="cell"><div class="num" data-cd="hours">0</div><div class="lab">hours</div></div>
         <div class="cell"><div class="num" data-cd="minutes">0</div><div class="lab">min</div></div>
@@ -238,7 +240,7 @@
     <h2>Ready to build something real?</h2>
     <p>Places are limited. Register now and we will be in touch with everything you need before the weekend.</p>
     <a class="btn btn-primary" data-register href="#register">Register now</a>
-    <p style="margin-top:22px;font-size:.95rem">Questions? <a data-mail href="#">Write to the organisers</a> · Want to sponsor? <a data-mail-partner href="#">Become a partner</a></p>
+    <p class="cta-links"><span>Questions? <a data-mail href="#">Write to the organisers</a></span><span>Want to sponsor? <a data-mail-partner href="#">Become a partner</a></span></p>
   </div>
 </section>
 </main>

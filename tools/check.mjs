@@ -36,6 +36,20 @@ for (const [file, ew, eh] of [['og-image.jpg', w, h], ['share-square.jpg', 800, 
   if (kb > 300) fail(`${file} is ${kb.toFixed(0)} KB; WhatsApp drops thumbnails over 300 KB`);
   ok(`${file} ${dim ? dim.w + 'x' + dim.h : ''} ${kb.toFixed(0)} KB`);
 }
+/* the home-screen icon an iPhone uses: a 180x180 PNG */
+{
+  const p = path.join(ROOT, 'apple-touch-icon.png');
+  if (!html.includes('rel="apple-touch-icon" href="apple-touch-icon.png"')) fail('index.html does not link apple-touch-icon.png');
+  if (!existsSync(p)) fail('apple-touch-icon.png is missing (node tools/make-share-images.mjs)');
+  else {
+    const b = readFileSync(p);
+    const isPng = b.readUInt32BE(0) === 0x89504e47;
+    const w = isPng ? b.readUInt32BE(16) : 0, h = isPng ? b.readUInt32BE(20) : 0;
+    if (!isPng || w !== 180 || h !== 180) fail(`apple-touch-icon.png should be a 180x180 PNG, is ${isPng ? w + 'x' + h : 'not a PNG'}`);
+    else ok('apple-touch-icon.png 180x180');
+  }
+}
+if (!/<meta name="viewport" content="width=device-width, initial-scale=1">/.test(html)) fail('the viewport tag must be exactly width=device-width, initial-scale=1 (never block zoom)');
 if (C.siteUrl && !html.includes(`og:url" content="${C.siteUrl}"`)) fail(`og:url in index.html does not match siteUrl in config.js (${C.siteUrl})`);
 if (C.siteUrl && !html.includes(`rel="canonical" href="${C.siteUrl}"`)) fail('canonical link does not match siteUrl in config.js');
 if (/property="og:\w+"[^>]*name=|name="og:/.test(html)) fail('an og:* tag uses name= instead of property=');

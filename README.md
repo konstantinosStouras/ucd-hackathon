@@ -24,11 +24,17 @@ the site republishes on its own within a minute or two.
 | Contact e-mail, social links | `contactEmail`, `linkedinUrl`, `instagramUrl` in `config.js` |
 | Wording of a section, the programme, the FAQs | the matching section of `index.html` (each is marked with a banner comment) |
 | Colours | the variables at the top of `styles.css` (`--navy`, `--gold`) |
-| The share card people see when the link is pasted | run `node tools/make-share-images.mjs` after changing the date or venue |
+| The share card people see when the link is pasted | run `node tools/make-share-images.mjs` after changing the date or venue (it also redraws the home-screen icon) |
 
 Before launch run `node tools/check.mjs`. It verifies the in-page links, the
 share-card tags against the real image sizes, and the partner files, and it
 lists every placeholder still marked TODO in `config.js`.
+
+After changing the layout run `node tools/smoke.mjs` (needs Playwright). It
+opens the page at six phone sizes, portrait and landscape, and fails if
+anything is wider than the screen, a link is too small for a thumb, the
+headline or Register button drops off the first screen, or the menu cannot be
+scrolled and closed.
 
 ## Files
 
@@ -40,6 +46,7 @@ lists every placeholder still marked TODO in `config.js`.
     og-image.jpg            1200x630 link-preview card
     share-square.jpg        800x800 square thumbnail for clients that crop
     favicon.svg             the tab icon
+    apple-touch-icon.png    the icon an iPhone shows when the page is added to the home screen
     tools/check.mjs         offline checks
     tools/make-share-images.mjs  redraws the two pictures from config.js
 

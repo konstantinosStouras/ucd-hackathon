@@ -45,10 +45,11 @@ lists every placeholder still marked TODO in `config.js`.
 
 ## Hosting
 
-The site is published by GitHub Pages from the `main` branch, root folder
-(repository Settings, Pages). Because the owner's user site carries the custom
-domain `www.stouras.com`, this project site is served under it automatically
-at `/ucd-hackathon/`.
+The site is published by GitHub Pages through the workflow in
+`.github/workflows/pages.yml`, which runs on every push to `main` (repository
+Settings, Pages, Source: "GitHub Actions"). Because the owner's user site
+carries the custom domain `www.stouras.com`, this project site is served
+under it automatically at `/ucd-hackathon/`.
 
 To move the site to its own domain later (for example `ucdhackathon.ie`):
 add a file named `CNAME` containing the bare domain, point the domain's DNS at

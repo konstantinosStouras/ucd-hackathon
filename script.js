@@ -106,14 +106,26 @@
   /* ---- mobile menu ---- */
   var toggle = $('.nav-toggle'), nav = $('#nav');
   if (toggle && nav) {
-    toggle.addEventListener('click', function () {
-      var open = nav.classList.toggle('open');
+    var setOpen = function (open) {
+      nav.classList.toggle('open', open);
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+    toggle.addEventListener('click', function () { setOpen(!nav.classList.contains('open')); });
+    $$('a', nav).forEach(function (a) { a.addEventListener('click', function () { setOpen(false); }); });
+    // a tap anywhere outside the header, or Escape, closes the menu
+    document.addEventListener('click', function (e) {
+      if (nav.classList.contains('open') && !e.target.closest('.site-header')) setOpen(false);
     });
-    $$('a', nav).forEach(function (a) {
-      a.addEventListener('click', function () { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('open')) { setOpen(false); toggle.focus(); }
     });
+    // turning a phone to landscape can cross the desktop breakpoint
+    if (window.matchMedia) {
+      var mq = window.matchMedia('(min-width: 861px)');
+      var onChange = function () { if (mq.matches) setOpen(false); };
+      if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
+    }
   }
 
   /* ---- footer social links ---- */

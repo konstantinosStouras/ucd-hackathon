@@ -3,6 +3,9 @@
    say a different date or venue from the page:
      og-image.jpg      1200x630  the wide card (WhatsApp, LinkedIn, Slack, X)
      share-square.jpg  800x800   the square thumbnail some clients centre-crop
+     apple-touch-icon.png 180x180 the icon an iPhone uses on the home screen
+                                  (iOS ignores SVG favicons; it rounds the
+                                  corners itself, so this one is full-bleed)
    Usage: node tools/make-share-images.mjs   (needs Playwright + Chromium)
    Look at the pictures before committing them. */
 import { readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
@@ -53,6 +56,10 @@ function page(w, h, square) {
   ${square ? '' : chip(360)}
 </div><div class="url">${esc((C.siteUrl || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))}</div></body></html>`;
 }
+function touchIcon() {
+  return `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;width:180px;height:180px;overflow:hidden;background:#003c71}</style></head><body>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="180" height="180"><rect width="32" height="32" fill="#003c71"/><g fill="none" stroke="#ffb81c" stroke-width="1.6" stroke-linecap="round"><rect x="10" y="10" width="12" height="12" rx="2"/><path d="M13.5 10V6.5M18.5 10V6.5M13.5 22v3.5M18.5 22v3.5M10 13.5H6.5M10 18.5H6.5M22 13.5h3.5M22 18.5h3.5"/></g><rect x="13.5" y="13.5" width="5" height="5" rx=".8" fill="#ffb81c"/></svg></body></html>`;
+}
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 
 async function main() {
@@ -74,6 +81,14 @@ async function main() {
       console.log(`${file}: ${w}x${h}, ${(buf.length / 1024).toFixed(0)} KB`);
       await pg.close();
     }
+    const f = path.join(tmp, 'touch.html');
+    writeFileSync(f, touchIcon());
+    const pg = await browser.newPage({ viewport: { width: 180, height: 180 }, deviceScaleFactor: 1 });
+    await pg.goto(pathToFileURL(f).href);
+    const buf = await pg.screenshot({ type: 'png' });
+    writeFileSync(path.join(ROOT, 'apple-touch-icon.png'), buf);
+    console.log(`apple-touch-icon.png: 180x180, ${(buf.length / 1024).toFixed(0)} KB`);
+    await pg.close();
   } finally { await browser.close(); rmSync(tmp, { recursive: true, force: true }); }
 }
 main().catch(e => { console.error(e); process.exit(1); });
